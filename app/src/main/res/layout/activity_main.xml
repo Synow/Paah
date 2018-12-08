@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Paah Timer"
+        android:textSize="40dp"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_margin="15dp"
         android:layout_height="wrap_content"
+        android:textSize="40dp"
         android:text="Start"/>
 
 </LinearLayout>
