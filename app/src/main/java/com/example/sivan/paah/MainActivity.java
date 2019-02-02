@@ -64,9 +64,25 @@ public class MainActivity extends AppCompatActivity  {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.RECORD_AUDIO},
                         1);
-            } else {} // ????
+            } else {
+                startApp();
+            }
         }
 
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            String[] permissions,
+            int[] grantResults
+    ){
+        startApp();
+    }
+
+
+    public void startApp(){
 
         tvTextView = findViewById(R.id.timerTextView);
         btnStart = findViewById(R.id.timerButton);
