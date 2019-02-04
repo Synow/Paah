@@ -126,17 +126,5 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
-        stopwatch.stop();
-    }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
-        stopwatch.stop();
-    }
 }
