@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity  {
 
     Stopwatch stopwatch;
     TextView tvTextView;
-    TextView tvVolumeView;
+    ProgressBar progressBar;
     ImageView ivCircle;
     Button btnStart;
     Timer timer;
@@ -52,7 +54,6 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -68,8 +69,6 @@ public class MainActivity extends AppCompatActivity  {
                 startApp();
             }
         }
-
-
     }
 
     @Override
@@ -81,12 +80,10 @@ public class MainActivity extends AppCompatActivity  {
         startApp();
     }
 
-
     public void startApp(){
-
         tvTextView = findViewById(R.id.timerTextView);
         btnStart = findViewById(R.id.timerButton);
-        tvVolumeView = findViewById(R.id.volumeTextView);
+        progressBar = findViewById(R.id.progressBar);
         ivCircle = findViewById(R.id.imageView);
         sbSeekBar = findViewById(R.id.SensitivityBar);
 
@@ -97,26 +94,23 @@ public class MainActivity extends AppCompatActivity  {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        double volumeLevel = soundmeter.getAmplitude();
-                        tvVolumeView.setText("" + volumeLevel);
-                        if(lock) {
-                            lock = false;
-                            return;
-                        }
-                        if (volumeLevel > 400 * (100 - sbSeekBar.getProgress())) {
-                            ivCircle.setVisibility(View.VISIBLE);
-                            btnStart.performClick();
-                            lock = true;
-                        } else {
-                            ivCircle.setVisibility(View.INVISIBLE);
-                        }
+                    double volumeLevel = soundmeter.getAmplitude();
+                    progressBar.setProgress(100 * (int)volumeLevel / 40000 );
+                    if(lock) {
+                        lock = false;
+                        return;
+                    }
+                    if (volumeLevel > 400 * (sbSeekBar.getProgress())) {
+                        ivCircle.setVisibility(View.VISIBLE);
+                        btnStart.performClick();
+                        lock = true;
+                    } else {
+                        ivCircle.setVisibility(View.INVISIBLE);
+                    }
                     }
                 });
             }
-        },0,200);
-
-
-
+        },0,100);
 
         stopwatch = new Stopwatch();
         soundmeter = new Soundmeter();
@@ -142,5 +136,10 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
-
+    @Override
+    public void onStop(){
+        super.onStop();
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
+    }
 }
